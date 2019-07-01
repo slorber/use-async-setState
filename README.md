@@ -24,8 +24,7 @@ const Comp = () => {
 
 Even if your component has updated after promise resolution, the async closure being currently executed remains the same and variables captured in it remains updated.
 
-If your async closure need access to the current state, you can use `useGetState` which will use a ref to return you the up-to-date state.
-
+If your async closure need access to the current state, you can use `useGetState` to return you the latest state.
 
 ```ts
 import { useAsyncSetState, useGetState } from "use-async-setState";
@@ -43,6 +42,8 @@ const Comp = () => {
   return <div>...</div> 
 }   
 ```
+
+It's exactly the same as when using a classes: you would read the state by using `this.state`, where `this` is acts somehow as a mutable state ref.
 
 
 # License
