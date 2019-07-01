@@ -1,8 +1,7 @@
 import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { useAsyncSetState } from '../.';
-import { useEffect, useRef } from 'react';
+import { useAsyncSetState, useGetState } from '../.';
 
 const buttonStyle = {
   margin: 10,
@@ -13,16 +12,12 @@ const buttonStyle = {
 };
 
 const App = () => {
-  const [state,setStateAsync] = useAsyncSetState({ counter: 0 });
+  const [state, setStateAsync] = useAsyncSetState({ counter: 0 });
 
-  const stateRef = useRef(state);
-  useEffect(() => {
-    stateRef.current = state;
-  }, [state]);
+  const getState = useGetState(state);
 
   const incrementAsync = async () => {
-    // Not using a functional setState on purpose!
-    await setStateAsync({ counter: stateRef.current.counter + 1 });
+    await setStateAsync({ counter: getState().counter + 1 });
   };
 
   const incrementAsyncFunctional = async () => {
