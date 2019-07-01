@@ -49,11 +49,16 @@ export const useAsyncSetStateFunction = <S>(
   );
 };
 
-
-export const useAsyncSetState = <S>(
-  initialState: S,
-): [S,AsyncSetState<S>] => {
+export const useAsyncSetState = <S>(initialState: S): [S, AsyncSetState<S>] => {
   const [state, setState] = useState(initialState);
-  const setStateAsync = useAsyncSetStateFunction(state,setState);
+  const setStateAsync = useAsyncSetStateFunction(state, setState);
   return [state, setStateAsync];
+};
+
+export const useGetState = <S>(state: S): (() => S) => {
+  const stateRef = useRef(state);
+  useEffect(() => {
+    stateRef.current = state;
+  });
+  return useCallback(() => stateRef.current, [stateRef]);
 };

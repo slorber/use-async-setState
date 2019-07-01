@@ -14,37 +14,34 @@ const Comp = () => {
   
   const incrementAsync = async () => {
     await setStateAsync(s => ({...s: counter: s.counter+1}));
-    await doSomethingElse();
   }
   
   return <div>...</div> 
 }   
 ```
 
-### Warning
+# Reading your own writes in async closures
 
 Even if your component has updated after promise resolution, the async closure being currently executed remains the same and variables captured in it remains updated.
 
-If your async closure need access to current state, you'd rather use a `getState()` getter to always read fresh state:
+If your async closure need access to the current state, you can use `useGetState` which will use a ref to return you the up-to-date state.
+
 
 ```ts
-const useGetState = (state) => {
-  const stateRef = useRef(state);
-  useEffect(() => {
-    stateRef.current = state;
-  });
-  return useCallback(() => stateRef.current, [stateRef]);
-};
-```
+import { useAsyncSetState, useGetState } from "use-async-setState";
 
-This way you are sure to read your state writes in the async closure:
-
-```ts
-  const incrementTwice = async () => {
-    await setStateAsync({...getState(): counter: getState() + 1});
-    await setStateAsync({...getState(): counter: getState() + 1});
+const Comp = () => {
+  const [state,setStateAsync] = useAsyncSetState({ counter: 0 });
+  const getState = useGetState(state);
+  
+  const incrementTwiceAndSubmit = async () => {
+    await setStateAsync({...getState(): counter: getState().counter + 1});
+    await setStateAsync({...getState(): counter: getState().counter + 1});
     await submitState(getState());
   }
+  
+  return <div>...</div> 
+}   
 ```
 
 
