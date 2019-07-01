@@ -2,7 +2,7 @@ import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { useAsyncSetState } from '../.';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 const buttonStyle = {
   margin: 10,
@@ -13,8 +13,7 @@ const buttonStyle = {
 };
 
 const App = () => {
-  const [state, setState] = useState({ counter: 0 });
-  const setStateAsync = useAsyncSetState(state, setState);
+  const [state,setStateAsync] = useAsyncSetState({ counter: 0 });
 
   const stateRef = useRef(state);
   useEffect(() => {
