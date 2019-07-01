@@ -10,6 +10,7 @@ test('should increment counter', async () => {
   const useAsyncSetStateHook = renderHook(() =>
     useAsyncSetState<TestState>({ label: 'hey', counter: 0 })
   );
+
   const getState = () => useAsyncSetStateHook.result.current[0];
   const setStateAsync = useAsyncSetStateHook.result.current[1];
 
@@ -24,14 +25,10 @@ test('should increment counter', async () => {
         counter: getState().counter + 1,
       }) as any
     );
-    // Wait for state update
     await act(() => useAsyncSetStateHook.waitForNextUpdate() as any);
-    // trigger re-render of useAsyncSetState hook
     await act(() => useAsyncSetStateHook.rerender() as any);
-    // Now the promise should be resolved
     await promise;
   };
-
 
   assertCounter(0);
   await incrementAsync();
