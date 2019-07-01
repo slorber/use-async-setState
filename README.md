@@ -6,7 +6,7 @@
 
 `setState` returned by `useState` does not take a callback anymore, but this is sometimes convenient to chain setState calls one after the other.
 
-``` 
+```ts
 import { useAsyncSetState } from "use-async-setState";
 
 const Comp = () => {
@@ -40,7 +40,7 @@ const useGetState = (state) => {
 
 This way you are sure to read your writes
 
-```
+```ts
   const incrementTwice = async () => {
     await setStateAsync({...getState(): counter: getState() + 1});
     await setStateAsync({...getState(): counter: getState() + 1});
