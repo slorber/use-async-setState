@@ -7,26 +7,24 @@ type TestState = {
 };
 
 test('should increment counter', async () => {
-  const useAsyncSetStateHook = renderHook(() =>
+  const { result } = renderHook(() =>
     useAsyncSetState<TestState>({ label: 'hey', counter: 0 })
   );
 
-  const getState = () => useAsyncSetStateHook.result.current[0];
-  const setStateAsync = useAsyncSetStateHook.result.current[1];
-
+  const getState = () => result.current[0];
+  const setStateAsync = result.current[1];
 
   const assertCounter = (expectedValue: number) =>
     expect(getState().counter).toBe(expectedValue);
 
   const incrementAsync = async () => {
-    const promise = await act(() =>
-      setStateAsync({
+    let promise: any;
+    act(() => {
+      promise = setStateAsync({
         ...getState(),
         counter: getState().counter + 1,
-      }) as any
-    );
-    await act(() => useAsyncSetStateHook.waitForNextUpdate() as any);
-    await act(() => useAsyncSetStateHook.rerender() as any);
+      });
+    });
     await promise;
   };
 
@@ -37,5 +35,4 @@ test('should increment counter', async () => {
   assertCounter(2);
   await incrementAsync();
   assertCounter(3);
-
 });
