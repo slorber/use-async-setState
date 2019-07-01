@@ -25,8 +25,7 @@ const Comp = () => {
 
 Even if your component has updated after promise resolution, the async closure being currently executed remains the same and variables captured in it remains updated.
 
-If your async closure need access to current state, you'd rather use a `getState()` getter to always read fresh state.
-
+If your async closure need access to current state, you'd rather use a `getState()` getter to always read fresh state:
 
 ```ts
 const useGetState = (state) => {
@@ -38,7 +37,7 @@ const useGetState = (state) => {
 };
 ```
 
-This way you are sure to read your writes
+This way you are sure to read your state writes in the async closure:
 
 ```ts
   const incrementTwice = async () => {
