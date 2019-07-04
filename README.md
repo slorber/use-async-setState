@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.com/slorber/use-async-setState.svg?branch=master)](https://travis-ci.com/slorber/use-async-setState)
 
 
-`setState` returned by `useState` does not take a callback anymore, but this is sometimes convenient to chain setState calls one after the other.
+`setState` returned by `useState` does not take a callback anymore, but this is sometimes convenient to chain `setState` calls one after the other.
 
 ```ts
 import { useAsyncSetState } from "use-async-setState";
@@ -14,6 +14,8 @@ const Comp = () => {
   
   const incrementAsync = async () => {
     await setStateAsync(s => ({...s: counter: s.counter+1}));
+    await setStateAsync(s => ({...s: counter: s.counter+1}));
+    await setStateAsync(s => ({...s: counter: s.counter+1}));
   }
   
   return <div>...</div> 
@@ -22,9 +24,30 @@ const Comp = () => {
 
 # Reading your own writes in async closures
 
-Even if your component has updated after promise resolution, the async closure being currently executed remains the same and variables captured in it remains updated.
+**Warning: this applies if you use closures + `setState` in the non-functional way (`setState(newState)` instead of `setState(s => s)`)**. You'd rather always use the functional form when possible.
 
-If your async closure need access to the current state, you can use `useGetState` to return you the latest state.
+
+```ts
+import { useAsyncSetState, useGetState } from "use-async-setState";
+
+const Comp = () => {
+  const [state,setStateAsync] = useAsyncSetState({ counter: 0 });
+  
+  const incrementTwiceAndSubmit = async () => {
+    await setStateAsync({...state: counter: state.counter + 1});
+    await setStateAsync({...state: counter: state.counter + 1});
+    await setStateAsync({...state: counter: state.counter + 1});
+  }
+  
+  return <div>...</div> 
+}   
+```
+
+The following won't work fine. In this case, the `state` variable has been captured by the closure. 
+
+It's value is 0 and you are basically doing `await setStateAsync({...state: counter: 0 + 1});` 3 times: at the end the counter value is 1.
+
+If you need to use the non-functional `setState` (which I don't recommend for async stuff), you can use the `useGetState` helper to get access to the latest state inside your closure:
 
 ```ts
 import { useAsyncSetState, useGetState } from "use-async-setState";
@@ -36,14 +59,14 @@ const Comp = () => {
   const incrementTwiceAndSubmit = async () => {
     await setStateAsync({...getState(): counter: getState().counter + 1});
     await setStateAsync({...getState(): counter: getState().counter + 1});
-    await submitState(getState());
+    await setStateAsync({...getState(): counter: getState().counter + 1});
   }
   
   return <div>...</div> 
 }   
 ```
 
-It's exactly the same as when using a classes: you would read the state by using `this.state`, where `this` is acts somehow as a mutable state ref.
+Actually, it's exactly the same as when using a classes: you would read the state by using `this.state`, where `this` acts somehow as a mutable state ref to access the latest state.
 
 
 # License
