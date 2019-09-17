@@ -1,6 +1,6 @@
 # use-async-setState
 
-[![NPM](https://img.shields.io/npm/dm/use-async-setState.svg)](https://www.npmjs.com/package/use-async-setState)
+[![NPM](https://img.shields.io/npm/dm/use-async-setstate.svg)](https://www.npmjs.com/package/use-async-setstate)
 [![Build Status](https://travis-ci.com/slorber/use-async-setState.svg?branch=master)](https://travis-ci.com/slorber/use-async-setState)
 
 
