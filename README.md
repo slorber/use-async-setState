@@ -13,9 +13,9 @@ const Comp = () => {
   const [state,setStateAsync] = useAsyncSetState({ counter: 0 });
   
   const incrementAsync = async () => {
-    await setStateAsync(s => ({...s: counter: s.counter+1}));
-    await setStateAsync(s => ({...s: counter: s.counter+1}));
-    await setStateAsync(s => ({...s: counter: s.counter+1}));
+    await setStateAsync(s => ({...s, counter: s.counter+1}));
+    await setStateAsync(s => ({...s, counter: s.counter+1}));
+    await setStateAsync(s => ({...s, counter: s.counter+1}));
   }
   
   return <div>...</div> 
@@ -34,9 +34,9 @@ const Comp = () => {
   const [state,setStateAsync] = useAsyncSetState({ counter: 0 });
   
   const incrementTwiceAndSubmit = async () => {
-    await setStateAsync({...state: counter: state.counter + 1});
-    await setStateAsync({...state: counter: state.counter + 1});
-    await setStateAsync({...state: counter: state.counter + 1});
+    await setStateAsync({...state, counter: state.counter + 1});
+    await setStateAsync({...state, counter: state.counter + 1});
+    await setStateAsync({...state, counter: state.counter + 1});
   }
   
   return <div>...</div> 
@@ -57,9 +57,9 @@ const Comp = () => {
   const getState = useGetState(state);
   
   const incrementTwiceAndSubmit = async () => {
-    await setStateAsync({...getState(): counter: getState().counter + 1});
-    await setStateAsync({...getState(): counter: getState().counter + 1});
-    await setStateAsync({...getState(): counter: getState().counter + 1});
+    await setStateAsync({...getState(), counter: getState().counter + 1});
+    await setStateAsync({...getState(), counter: getState().counter + 1});
+    await setStateAsync({...getState(), counter: getState().counter + 1});
   }
   
   return <div>...</div> 
