@@ -49,7 +49,9 @@ export const useAsyncSetStateFunction = <S>(
   );
 };
 
-export const useAsyncSetState = <S>(initialState: S): [S, AsyncSetState<S>] => {
+export const useAsyncSetState = <S>(
+  initialState: S | (() => S)
+): [S, AsyncSetState<S>] => {
   const [state, setState] = useState(initialState);
   const setStateAsync = useAsyncSetStateFunction(state, setState);
   return [state, setStateAsync];
